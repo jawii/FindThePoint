@@ -5,47 +5,45 @@ FindPoint.GameState = {
 
   //initiate game settings
   init: function() {
+
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    
     this.origo = [this.game.width/2, this.game.height/2];
     
-    //koordinaatistojen viivojen tyyli
-    this.coordLineWidth = 1;
+    //Line style
+    this.coordLineWidth = 0.5;
     this.coordLineColor = 'gray';
-    this.coordLineAlpha = 0.5;
+    this.coordLineAlpha = 0.8;
       
-    //akselien tyyli
+    //Axis style
     this.axLineWidth = 3;
     this.axLineColor = 'black';
     this.axLineAlpha = 0.5;
-      
-    //placepoint ympyrän tyyli
-    this.pointCircleColor = 0xFF0000;
-    this.pointCircleDiameter = 11;
-    
-    //pixel number style
-    this.axNumStyle = {
-        font: "bold 1.2em Arial"
-    }
-    this.xaxisNumberOffsetX = -5;
+
+    //Axis number style
+     this.axNumStyle = {
+         font: "bold 18px Arial"
+        };
+
+    //Axis number offset
+    this.xaxisNumberOffsetX = -7;
     this.xaxisNumberOffsetY = 5;
     this.yaxisNumberOffsetX = 7;
-    this.yaxisNumberOffsetY = -5;
-    
-    
+    this.yaxisNumberOffsetY = -7;
+      
+    //Point Style
+    this.pointCircleColor = 0xFF0000;
+    this.pointCircleDiameter = 10;
     this.styleAx = {
         font: "20pt Arial",
         fill: "red"
     }
       
-    //coordinate
+    //coordinate grid
     this.COORD_YWIDTH = 6;
     var helperValue = Math.floor(this.COORD_YWIDTH * this.game.width / this.game.height);
-    // console.log(helperValue)
     this.COORD_XWIDTH = Math.min(helperValue, 16);
-    //console.log(this.COORD_XWIDTH); 
       
-    //pisteiden joukko
+    //group of points
     this.pointsGroup = [];
     this.pointsGroupPX = [];
       
@@ -57,13 +55,11 @@ FindPoint.GameState = {
 
   //load the game assets before the game starts
   preload: function() {
-    this.game.stage.backgroundColor = '#ffd317';
-    //load images
-    //this.load.image('space', 'assets/images/space.png');
-      
+    this.game.stage.backgroundColor = '#f9f6ff';
+
     this.graphics = this.game.add.graphics();
       
-    //tee joukko kaikista pisteistä   
+    //Group of points
     for (var x =- this.COORD_XWIDTH + 1; x < this.COORD_XWIDTH; x++){
         for (var y=-this.COORD_YWIDTH + 1; y<this.COORD_YWIDTH; y++){
                 //console.log([x, y]);
@@ -93,7 +89,7 @@ FindPoint.GameState = {
     this.inputY = FindPoint.game.input.y;
 
     if(this.game.input.activePointer.isDown && this.mouseUp){
-        this.mouseUp = false;
+        this.mouseUp = true;
         var nearestPoint = this.getNearestPoint(this.inputX, this.inputY);
         //console.log(this.getNearestPoint(this.inputX, this.inputY));
         this.placePoint(nearestPoint[0], nearestPoint[1])
@@ -108,7 +104,8 @@ FindPoint.GameState = {
     this.graphics.moveTo(point1[0], point1[1]);
     this.graphics.lineTo(point2[0], point2[1]);
     this.graphics.endFill();
-  }, 
+  },
+  //draws coordinate grid
   drawCoordinateSystem: function(){
     
     //vaakaviivat
@@ -133,12 +130,12 @@ FindPoint.GameState = {
         this.drawLine([x1, y1], [x2, y2], this.coordLineWidth, this.coordLineColor, this.coordLineAlpha);
         }
       
-    //akselit
+    //axis
     this.graphics.lineStyle(5, 0xff0000, 5);
     this.drawLine([0, this.game.height/2], [this.game.width, this.game.height/2], this.axLineWidth, this.axLineColor, this.axLineAlpha);
     this.drawLine([this.game.width/2, 0], [this.game.width/2, this.game.height], this.axLineWidth, this.axLineColor, this.axLineAlpha);
       
-    //nuolet
+    //arrows
     var arrowPlaceX = [this.game.width, this.game.height/2]
     var arrowPlaceY = [this.game.width/2, 0]
 
@@ -148,7 +145,7 @@ FindPoint.GameState = {
     this.drawLine(arrowPlaceY, [arrowPlaceY[0] + 6, arrowPlaceY[1] + 8], 2);
     this.drawLine(arrowPlaceY, [arrowPlaceY[0] - 6, arrowPlaceY[1] + 8], 2);
 
-    //akseleiden nimet
+    //axis name
     this.game.add.text(arrowPlaceX[0] - 20, arrowPlaceX[1], "x", this.styleAx);
     this.game.add.text(arrowPlaceY[0] + 20 , arrowPlaceY[1], "y", this.styleAx);
       
@@ -171,13 +168,13 @@ FindPoint.GameState = {
            }
         }, this);    
   },
-  //returns [x,y] - koordinates real pixelpoints
+  //returns [x,y] - coordinates of real pixelpoints
   returnPoint: function(xCord, yCord){
             var x = this.origo[0] + xCord * (this.game.width / (2 * this.COORD_XWIDTH));
             var y = this.origo[1] - yCord * (this.game.height / (2 * this.COORD_YWIDTH));     
             return [x,y];
       },
-  //laittaa pisteen [x,y] - pisteelle 
+  //Place Point to x,y point
   placePoint: function(xCord, yCord) {
             var x5 = this.origo[0] + xCord * (this.game.width / (2 * this.COORD_XWIDTH));
             var y5 = this.origo[1] - yCord * (this.game.height/ (2 * this.COORD_YWIDTH)); 
