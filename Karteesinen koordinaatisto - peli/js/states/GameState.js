@@ -46,11 +46,10 @@ FindPoint.GameState = {
     //group of points
     this.pointsGroup = [];
     this.pointsGroupPX = [];
-      
-    //mouse
-    this.mouseUp = true;
-    
-    
+
+
+
+
   },
 
   //load the game assets before the game starts
@@ -75,7 +74,15 @@ FindPoint.GameState = {
       
     //draw coordinates
     this.drawCoordinateSystem();
-      
+
+    //first point
+    this.nearestPoint = [];
+    this.randPoint = this.pickRandomPoint()
+    console.log("RandomPoint: " + this.randPoint);
+
+    //mouse
+    this.mouseUp = true;         
+    this.pointSelected = false;    
   },
   
   //executed after everything is loaded
@@ -89,13 +96,31 @@ FindPoint.GameState = {
     this.inputY = FindPoint.game.input.y;
 
     if(this.game.input.activePointer.isDown && this.mouseUp){
-        this.mouseUp = true;
-        var nearestPoint = this.getNearestPoint(this.inputX, this.inputY);
+        this.mouseUp = false;
+        this.pointSelected = true;
+        this.nearestPoint = this.getNearestPoint(this.inputX, this.inputY);
         //console.log(this.getNearestPoint(this.inputX, this.inputY));
-        this.placePoint(nearestPoint[0], nearestPoint[1])
-    }  
-      
-    //console.log("Input is in coordinates: " + "(" + this.inputX + "," + this.inputY + ")");
+        this.placePoint(this.nearestPoint[0], this.nearestPoint[1])
+    }
+
+    //get random point and check if selected point is that
+    if (this.pointSelected){
+        if (this.randPoint === this.nearestPoint){
+            console.log("Right Point");
+
+        }
+        else {
+            console.log("Wrong Point!");
+        }
+        this.pointSelected = false;
+        this.mouseUp = true;
+        this.randPoint = this.pickRandomPoint();
+        console.log("RandomPoint: " + this.randPoint);
+
+    }
+
+
+
   },
   //draws line
   drawLine: function(point1, point2, linewidth, linecolor, alpha) {
@@ -173,7 +198,7 @@ FindPoint.GameState = {
             var x = this.origo[0] + xCord * (this.game.width / (2 * this.COORD_XWIDTH));
             var y = this.origo[1] - yCord * (this.game.height / (2 * this.COORD_YWIDTH));     
             return [x,y];
-      },
+  },
   //Place Point to x,y point
   placePoint: function(xCord, yCord) {
             var x5 = this.origo[0] + xCord * (this.game.width / (2 * this.COORD_XWIDTH));
@@ -182,7 +207,7 @@ FindPoint.GameState = {
             this.graphics.beginFill(this.pointCircleColor);
             this.graphics.drawCircle(x5, y5, this.pointCircleDiameter);
             //this.graphics.endFill();
-  },
+   },
   //take the nearest point
   getNearestPoint: function(x, y){
   //search what is nearest point for variables
@@ -196,6 +221,10 @@ FindPoint.GameState = {
           }
       }, this);
       return point;
-  } 
+  },
+  pickRandomPoint: function(){
+      //picks random point of pointsGroup
+      return this.pointsGroup[Math.floor(Math.random() * this.pointsGroup.length )];
+  }
 
 };
