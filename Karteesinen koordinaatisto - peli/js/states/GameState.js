@@ -77,49 +77,42 @@ FindPoint.GameState = {
 
     //first point
     this.nearestPoint = [];
-    this.randPoint = this.pickRandomPoint()
-    console.log("RandomPoint: " + this.randPoint);
+    this.randPoint = this.pickRandomPoint();
+    this.pointText = this.game.add.text(30, this.game.world.centerY/3, 'Place point to (' + this.randPoint + ")", null);
 
     //mouse
-    this.mouseUp = true;         
-    this.pointSelected = false;    
+    this.pointSelected = false;
+    this.mouseUp = true;
+
+    //when mouse pressed, get the nearest point and place point there
+    //check also if placed point = random point
+    this.game.input.onDown.add(function() {
+        console.log("PUSH!!")
+        this.nearestPoint = this.getNearestPoint(FindPoint.game.input.x, FindPoint.game.input.y);
+        this.placePoint(this.nearestPoint[0], this.nearestPoint[1]);
+
+         if(this.randPoint === this.nearestPoint){
+             console.log("YOU FOUND IT!")
+         }
+         else{
+             console.log("wrong...")
+         }
+         this.randPoint = this.pickRandomPoint();
+         console.log("RandomPoint: " + this.randPoint);
+         this.pointText.destroy();
+         this.pointText = this.game.add.text(30, this.game.world.centerY/3, 'Place point to (' + this.randPoint + ")", null);
+
+    }, this);
+
+
   },
   
   //executed after everything is loaded
   create: function() {
-    
+
   },
-  
+
   update: function() {
-    //get input coordinates
-    this.inputX = FindPoint.game.input.x;
-    this.inputY = FindPoint.game.input.y;
-
-    if(this.game.input.activePointer.isDown && this.mouseUp){
-        this.mouseUp = false;
-        this.pointSelected = true;
-        this.nearestPoint = this.getNearestPoint(this.inputX, this.inputY);
-        //console.log(this.getNearestPoint(this.inputX, this.inputY));
-        this.placePoint(this.nearestPoint[0], this.nearestPoint[1])
-    }
-
-    //get random point and check if selected point is that
-    if (this.pointSelected){
-        if (this.randPoint === this.nearestPoint){
-            console.log("Right Point");
-
-        }
-        else {
-            console.log("Wrong Point!");
-        }
-        this.pointSelected = false;
-        this.mouseUp = true;
-        this.randPoint = this.pickRandomPoint();
-        console.log("RandomPoint: " + this.randPoint);
-
-    }
-
-
 
   },
   //draws line
