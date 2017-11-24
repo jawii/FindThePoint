@@ -7,4 +7,5 @@ FindPoint.game = new Phaser.Game(800, 600, Phaser.AUTO);
 
 
 FindPoint.game.state.add('GameState', FindPoint.GameState);
+FindPoint.game.state.add('MenuState', FindPoint.GameState);
 FindPoint.game.state.start('GameState');    

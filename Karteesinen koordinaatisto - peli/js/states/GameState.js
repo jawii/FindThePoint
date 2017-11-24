@@ -7,8 +7,8 @@ FindPoint.GameState = {
   init: function() {
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    this.origo = [this.game.width/2, this.game.height/2];
-    
+    this.origo = [this.game.world.width/2 , this.game.world.height/2];
+
     //Line style
     this.coordLineWidth = 0.5;
     this.coordLineColor = 'gray';
@@ -37,6 +37,8 @@ FindPoint.GameState = {
         font: "20pt Arial",
         fill: "red"
     }
+    //Points scale
+    this.POINTSCALE = 0.4;
       
     //coordinate grid
     this.COORD_YWIDTH = 6;
@@ -47,14 +49,17 @@ FindPoint.GameState = {
     this.pointsGroup = [];
     this.pointsGroupPX = [];
 
-
-
+    //placed points
+    this.placedPoints = this.add.group();
 
   },
 
   //load the game assets before the game starts
   preload: function() {
-    this.game.stage.backgroundColor = '#f9f6ff';
+
+
+    //load images
+    this.game.load.image('pointcircle', 'assets/images/pointcircle.png');
 
     this.graphics = this.game.add.graphics();
       
@@ -72,30 +77,29 @@ FindPoint.GameState = {
     }, this);
     this.pointsGroupPX = pointsGroupPXs
       
-    //draw coordinates
-    this.drawCoordinateSystem();
+
 
     //first point
     this.nearestPoint = [];
     this.randPoint = this.pickRandomPoint();
     this.pointText = this.game.add.text(30, this.game.world.centerY/3, 'Place point to (' + this.randPoint + ")", null);
 
-    //mouse
-    this.pointSelected = false;
-    this.mouseUp = true;
 
     //when mouse pressed, get the nearest point and place point there
     //check also if placed point = random point
     this.game.input.onDown.add(function() {
-        console.log("PUSH!!")
         this.nearestPoint = this.getNearestPoint(FindPoint.game.input.x, FindPoint.game.input.y);
-        this.placePoint(this.nearestPoint[0], this.nearestPoint[1]);
+        var placedSprite = this.placePoint(this.nearestPoint[0], this.nearestPoint[1]);
 
          if(this.randPoint === this.nearestPoint){
              console.log("YOU FOUND IT!")
+             //turn point to green animation and keep green
+
          }
          else{
+             //turn point red and boom
              console.log("wrong...")
+             this.blowPoint(placedSprite);
          }
          this.randPoint = this.pickRandomPoint();
          console.log("RandomPoint: " + this.randPoint);
@@ -109,6 +113,17 @@ FindPoint.GameState = {
   
   //executed after everything is loaded
   create: function() {
+
+      //start physics
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      this.game.stage.backgroundColor = '#f9f6ff';
+      //draw coordinates
+      this.drawCoordinateSystem();
+
+      //this.circle = this.game.add.sprite(100, 100, 'pointcircle');
+      //this.placedPoints.add(this.circle);
+
 
   },
 
@@ -192,14 +207,18 @@ FindPoint.GameState = {
             var y = this.origo[1] - yCord * (this.game.height / (2 * this.COORD_YWIDTH));     
             return [x,y];
   },
-  //Place Point to x,y point
+  //Place Point to x,y point and returns the points sprite
   placePoint: function(xCord, yCord) {
             var x5 = this.origo[0] + xCord * (this.game.width / (2 * this.COORD_XWIDTH));
             var y5 = this.origo[1] - yCord * (this.game.height/ (2 * this.COORD_YWIDTH)); 
-            this.graphics.moveTo(x5,y5);
-            this.graphics.beginFill(this.pointCircleColor);
-            this.graphics.drawCircle(x5, y5, this.pointCircleDiameter);
+            var circle = this.game.add.sprite(x5, y5, 'pointcircle');
+            circle.anchor.setTo(0.5);
+            circle.scale.setTo(this.POINTSCALE);
+            //this.graphics.moveTo(x5,y5);
+            //this.graphics.beginFill(this.pointCircleColor);
+            //this.graphics.drawCircle(x5, y5, this.pointCircleDiameter);
             //this.graphics.endFill();
+            return circle;
    },
   //take the nearest point
   getNearestPoint: function(x, y){
@@ -218,6 +237,20 @@ FindPoint.GameState = {
   pickRandomPoint: function(){
       //picks random point of pointsGroup
       return this.pointsGroup[Math.floor(Math.random() * this.pointsGroup.length )];
+  },
+  //blow the sprite
+  blowPoint: function(sprite){
+      console.log("BOooom!");
+      emitter = this.game.add.emitter(sprite.x, sprite.y, 200);
+      emitter.makeParticles('pointcircle');
+      emitter.gravity = 200;
+      emitter.start(true, 4000, null, 10);
+
+  },
+
+  render: function (){
+      //this.game.debug.geom(this.firstCircle, 'red')
+
   }
 
 };
