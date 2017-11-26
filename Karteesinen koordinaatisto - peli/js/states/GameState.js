@@ -63,7 +63,7 @@ FindPoint.GameState = {
     this.gameOn = true;
 
     //counter text
-    this.TIMER = 5;
+    this.TIMER = 30;
     //this.counter = 0;
     //this.counterText =  this.game.add.text(this.counterTextPosition.x, this.counterTextPosition.y, 'Time left: ' + (this.TIMER - this.counter), this.textStyle);
     this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
@@ -147,6 +147,19 @@ FindPoint.GameState = {
       this.timer.start();
 
 
+      //TESTING TEXTS
+      //var text = this.game.add.text(0, 0, "MyText");
+      //var textSprite = this.add.sprite(100, 200, null);
+      //textSprite.addChild(text);
+      //this.game.physics.enable(textSprite, Phaser.Physics.ARCADE);
+      //textSprite.body.gravity.y = 20;
+      //textSprite.addChild(text);
+      //this.physics.enable(textSprite, Phaser.Physics.ARCADE);
+      //textSprite.body.bounce.y = 1;
+      //textSprite.body.gravity.y = 2000;
+      //textSprite.body.collideWorldBounds = true;
+
+
   },
 
   update: function() {
@@ -172,7 +185,7 @@ FindPoint.GameState = {
     this.graphics.endFill();
   },
   //draws coordinate grid
-  drawCoordinateSystem: function(){
+    drawCoordinateSystem: function(){
     
     //vaakaviivat
     var newHeight = this.game.height / (2 * this.COORD_YWIDTH);
@@ -202,8 +215,8 @@ FindPoint.GameState = {
     this.drawLine([this.game.width/2, 0], [this.game.width/2, this.game.height], this.axLineWidth, this.axLineColor, this.axLineAlpha);
       
     //arrows
-    var arrowPlaceX = [this.game.width, this.game.height/2]
-    var arrowPlaceY = [this.game.width/2, 0]
+    var arrowPlaceX = [this.game.width, this.game.height/2];
+    var arrowPlaceY = [this.game.width/2, 0];
 
     this.drawLine(arrowPlaceX, [arrowPlaceX[0] - 8, arrowPlaceX[1] - 6], 2);
     this.drawLine(arrowPlaceX, [arrowPlaceX[0] - 8, arrowPlaceX[1] + 6], 2);
@@ -218,23 +231,22 @@ FindPoint.GameState = {
     this.axisLetterGroup.add(yAxis);
       
     //number of axis
-    // käy kaikki pisteet läpi pistejoukosta missä x tai y = 0 ja laita numerot;
     this.pointsGroup.forEach(function(element) {
         //x-akseli
         var xy
         if(element[1] === 0){
-           //console.log(element);
            xy = this.returnPoint(element[0], element[1]);
-           //console.log(xy)
            var xNumber = this.game.add.text(xy[0] + this.xaxisNumberOffsetX, xy[1] + this.xaxisNumberOffsetY, element[0], this.axNumStyle);
-           this.axisNumberGroup.add(xNumber)
+           var textSprite = this.add.sprite(0, 0, null);
+           textSprite.addChild(xNumber);
+           this.axisNumberGroup.add(textSprite);
         }
         if(element[0] === 0 && element[1] !== 0){
-           //console.log(element);
            xy = this.returnPoint(element[0], element[1]);
-           //console.log(xy)
            var yNumber = this.game.add.text(xy[0] + this.yaxisNumberOffsetX, xy[1] + this.yaxisNumberOffsetY, element[1], this.axNumStyle);
-            this.axisNumberGroup.add(yNumber)
+           textSprite = this.add.sprite(0, 0, null);
+           textSprite.addChild(yNumber);
+           this.axisNumberGroup.add(textSprite)
            }
         }, this);    
   },
@@ -312,8 +324,19 @@ FindPoint.GameState = {
       this.timerText.destroy();
       //remove coordinategrid
       this.graphics.clear();
-      this.axisNumberGroup.destroy();
-      this.axisLetterGroup.destroy();
+
+      //drop the axis numbers and letters
+      this.axisNumberGroup.forEach(function(element){
+          //console.log(element);
+          this.physics.enable(element, Phaser.Physics.ARCADE);
+          element.body.gravity.y = 2000 * Math.random();
+      }, this);
+      this.axisLetterGroup.forEach(function(element){
+          //console.log(element);
+          this.physics.enable(element, Phaser.Physics.ARCADE);
+          element.body.gravity.y = 2000 * Math.random();
+      }, this);
+
       //collect all green points and make the score
 
 
