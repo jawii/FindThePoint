@@ -40,7 +40,7 @@ FindPoint.HomeState = {
         }
         var gameNameText = this.game.add.text(this.game.world.width/2, 80, 'Find The Point', gameTextStyle);
         gameNameText.anchor.setTo(0.5);
-        gameNameText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 20);
+        gameNameText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 10);
 
         var startGameButton = this.game.add.button(this.game.world.width/2, 175, 'button');
         startGameButton.anchor.setTo(0.5);

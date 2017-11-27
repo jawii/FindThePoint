@@ -79,7 +79,7 @@ FindPoint.GameState = {
         this.blowSlowSprites = false;
 
         //counter text
-        this.TIMER = 5;
+        this.TIMER = 10;
         this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
     },
     //load the game assets before the game starts
@@ -177,7 +177,7 @@ FindPoint.GameState = {
         if (this.blowSlowSprites){
             this.placedPoints.forEach(function(element){
                 this.physics.enable(element, Phaser.Physics.ARCADE);
-                if(Math.abs(element.body.velocity.y) < 2){
+                if(Math.abs(element.body.velocity.y) < 3){
                     this.blowSprite(element);
                 }
 
@@ -339,7 +339,7 @@ FindPoint.GameState = {
             this.physics.enable(element, Phaser.Physics.ARCADE);
             element.body.collideWorldBounds = true;
             element.body.gravity.y = (2000 * Math.random());
-            element.body.bounce.set(0.9);
+            element.body.bounce.set(0.7);
             //now the blowing can start
             this.blowSlowSprites = true;
         }, this);
