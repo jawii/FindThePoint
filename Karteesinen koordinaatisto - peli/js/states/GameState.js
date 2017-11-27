@@ -6,8 +6,7 @@ FindPoint.GameState = {
     //initiate game settings
     init: function () {
 
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.origo = [this.game.world.width / 2, this.game.world.height / 2];
+
         //Line style
         this.coordLineWidth = 0.4;
         this.coordLineColor = 'gray';
@@ -28,6 +27,8 @@ FindPoint.GameState = {
             align: "center"
         };
 
+        this.score = 0;
+        this.highScore = localStorage.getItem("FindThePointHighScore");
         this.scoreTextStyle = {
             font: "32px Arial",
             fill: "#000000",
@@ -49,12 +50,13 @@ FindPoint.GameState = {
         this.COORD_YWIDTH = 6;
         var helperValue = Math.floor(this.COORD_YWIDTH * this.game.width / this.game.height);
         this.COORD_XWIDTH = Math.min(helperValue, 8);
+        this.origo = [this.game.world.width / 2, this.game.world.height / 2];
         //group of points
         this.pointsGroup = [];
         this.pointsGroupPX = [];
         //placed points
         this.placedPoints = this.add.group();
-        this.score = 0;
+
 
         //score text
         this.placePointTextPosition = {
@@ -74,9 +76,10 @@ FindPoint.GameState = {
         };
 
         this.gameOn = true;
+        this.blowSlowSprites = false;
 
         //counter text
-        this.TIMER = 30;
+        this.TIMER = 5;
         this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
     },
     //load the game assets before the game starts
@@ -166,9 +169,19 @@ FindPoint.GameState = {
         else {
 
             if (this.gameOn) {
-                this.gameOver();
+                this.game.time.events.add(1000, this.gameOver, this);
             }
             this.gameOn = false;
+        }
+        //at the end you can blow up particles
+        if (this.blowSlowSprites){
+            this.placedPoints.forEach(function(element){
+                this.physics.enable(element, Phaser.Physics.ARCADE);
+                if(Math.abs(element.body.velocity.y) < 2){
+                    this.blowSprite(element);
+                }
+
+            }, this)
         }
 
     },
@@ -327,6 +340,8 @@ FindPoint.GameState = {
             element.body.collideWorldBounds = true;
             element.body.gravity.y = (2000 * Math.random());
             element.body.bounce.set(0.9);
+            //now the blowing can start
+            this.blowSlowSprites = true;
         }, this);
 
         //place Score text
@@ -335,6 +350,7 @@ FindPoint.GameState = {
     },
     //blows the sprite and destroys it
     blowSprite: function (sprite, sprite_type) {
+        sprite_type = 'pointparticle_green';
         emitter = this.game.add.emitter(sprite.x, sprite.y, 300);
         emitter.makeParticles(sprite_type);
         //emitter.gravity = 20;
@@ -343,11 +359,38 @@ FindPoint.GameState = {
         emitter.start(true, 2000, null, 100);
         sprite.destroy();
     },
+    //add score and play again button
     scoreText: function () {
-        var text = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, "Your Score: " + this.score, this.scoreTextStyle);
-        text.anchor.setTo(0.5);
 
-        var playAgainText = this.game.add.text()
+        this.game.stage.backgroundColor =  FindPoint.HomeState.backgroundColor;
+        var scoreText = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, "Score: " + this.score, this.scoreTextStyle);
+        scoreText.anchor.setTo(0.5);
+
+        if(this.highScore !== null){
+            if (this.score > this.highScore){
+                localStorage.setItem("FindThePointHighScore", this.score)
+            }
+        }
+        else {
+            localStorage.setItem("FindThePointHighScore", this.score);
+        }
+        this.highScore = localStorage.getItem("FindThePointHighScore");
+        var highScoreText = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y + 50, "Your Highscore: " + this.score, this.scoreTextStyle);
+        highScoreText.anchor.setTo(0.5);
+
+        var restartButton = this.game.add.button(this.scoreTextPosition.x, this.scoreTextPosition.y + 200, 'button');
+        restartButton.anchor.setTo(0.5);
+        restartButton.scale.setTo(1.5);
+        var restartGameText =this.game.add.text(restartButton.position.x, restartButton.position.y, 'Restart Game', FindPoint.HomeState.startGameTextstyle);
+        restartGameText.anchor.setTo(0.5);
+
+        restartButton.events.onInputDown.add(function(){
+            restartButton.key = "button_pressed";
+            FindPoint.game.state.start('HomeState');
+        }, this);
+
+
+
     }
 
 

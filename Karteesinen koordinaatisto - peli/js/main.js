@@ -3,7 +3,11 @@
 var FindPoint = FindPoint || {};
 
 //initiate the Phaser framework
-FindPoint.game = new Phaser.Game(800, 600, Phaser.AUTO);
+var Presets = {
+    'width': window.innerWidth < 480 ? 480 : 800,
+    'height': window.innerHeight-32 < 320 ? 320 : 600
+};
+FindPoint.game = new Phaser.Game(Presets.width, Presets.height, Phaser.AUTO);
 
 
 FindPoint.game.state.add('GameState', FindPoint.GameState);
