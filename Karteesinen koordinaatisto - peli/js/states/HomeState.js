@@ -11,17 +11,22 @@ FindPoint.HomeState = {
         background.inputEnabled = true;
 
         //Background for this screen and game over screen
-        this.backgroundColor = "#646464"
+        this.backgroundColor = "#f9f6ff"
         this.game.stage.backgroundColor =  this.backgroundColor;
+
+        var backgroundImage = this.game.add.sprite(0, 0, 'background');
+        backgroundImage.height = this.game.height;
+        backgroundImage.width = this.game.width;
+        backgroundImage.alpha = 0.6;
 
         //this.backgroundImage = this.game.add.sprite(0, 0, 'background');
         //this.backgroundImage.height = this.game.height;
         //this.backgroundImage.width = this.game.width;
         //example image
-        var exampleImage = this.game.add.sprite(this.game.world.width/2, this.game.world.height/1.4, 'example');
-        exampleImage.anchor.setTo(0.5);
-        exampleImage.scale.setTo(1.5);
-        exampleImage.alpha = 0.9;
+        //var exampleImage = this.game.add.sprite(this.game.world.width/2, this.game.world.height/1.4, 'example');
+        //exampleImage.anchor.setTo(0.5);
+        //exampleImage.scale.setTo(1.0);
+        //exampleImage.alpha = 0.9;
 
 
 
@@ -36,22 +41,30 @@ FindPoint.HomeState = {
         };
         var gameTextStyle = {
             font: '80px Arial',
-            fill: '#3e90f5'
+            fill: '#ff32c3'
+        };
+        var guideTextStyle = {
+            font: '20px Arial',
+            fill: '#000000',
+            align: 'center'
         }
-        var gameNameText = this.game.add.text(this.game.world.width/2, 80, 'Find The Point', gameTextStyle);
+        var gameNameText = this.game.add.text(this.game.world.width/2, 120, 'Find The Point', gameTextStyle);
         gameNameText.anchor.setTo(0.5);
         gameNameText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 10);
 
-        var startGameButton = this.game.add.button(this.game.world.width/2, 175, 'button');
+        var startGameButton = this.game.add.button(this.game.world.width/2, this.game.world.height/1.21, 'button');
         startGameButton.anchor.setTo(0.5);
         startGameButton.scale.setTo(1.5);
         var startGameText =this.game.add.text(startGameButton.position.x, startGameButton.position.y, 'Start Game', this.startGameTextstyle);
         startGameText.anchor.setTo(0.5);
 
+        //var guideTextText = 'You have 60 seconds \n\n to place as many points you can in the Cartesian coordinate grid.';
+        //var guideText = this.game.add.text(this.game.world.width/2.5, this.game.world.height/2, guideTextText, guideTextStyle);
+        //guideText.anchor.setTo(0.5);
+        //guideText.setTextBounds(100, 0, 100, 100);
 
         startGameButton.events.onInputDown.add(function(){
             startGameButton.key = "button_pressed";
-            this.game.time.events.add(3000);
             FindPoint.game.state.start('GameState');
         }, this);
 

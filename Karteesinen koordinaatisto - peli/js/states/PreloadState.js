@@ -18,6 +18,7 @@ FindPoint.PreloadState = {
     this.game.load.image('pointparticle', 'assets/images/pointparticle.png');
     this.game.load.image('pointparticle_green', 'assets/images/pointparticle_green.png');
     this.game.load.image('example', 'assets/images/example.png');
+    this.game.load.image('background', 'assets/images/background_coordinate.png');
 
 
     //http://www.kenney.nl/assets/ui-pack-rpg-expansion

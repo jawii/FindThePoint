@@ -8,7 +8,7 @@ FindPoint.GameState = {
 
 
         //Line style
-        this.coordLineWidth = 0.4;
+        this.coordLineWidth = 0.6;
         this.coordLineColor = 'gray';
         this.coordLineAlpha = 0.4;
         //Axis style
@@ -79,7 +79,7 @@ FindPoint.GameState = {
         this.blowSlowSprites = false;
 
         //counter text
-        this.TIMER = 10;
+        this.TIMER = 60;
         this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
     },
     //load the game assets before the game starts
