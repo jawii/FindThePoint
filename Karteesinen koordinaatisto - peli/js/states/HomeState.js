@@ -26,8 +26,8 @@ FindPoint.HomeState = {
         //var exampleImage = this.game.add.sprite(this.game.world.width/2, this.game.world.height/1.4, 'example');
         //exampleImage.anchor.setTo(0.5);
         //exampleImage.scale.setTo(1.0);
-        //exampleImage.alpha = 0.9;
-
+        //exampleImage.alpha = 0.9; 
+        this.game.add.text()
 
 
 

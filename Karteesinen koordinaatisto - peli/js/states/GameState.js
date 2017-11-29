@@ -6,7 +6,6 @@ FindPoint.GameState = {
     //initiate game settings
     init: function () {
 
-
         //Line style
         this.coordLineWidth = 0.6;
         this.coordLineColor = 'gray';
