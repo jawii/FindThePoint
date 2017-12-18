@@ -79,7 +79,7 @@ FindPoint.GameState = {
         this.blowSlowSprites = false;
 
         //counter text
-        this.TIMER = 60;
+        this.TIMER = 30;
         this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
     },
     //load the game assets before the game starts
@@ -115,7 +115,7 @@ FindPoint.GameState = {
                 var placedSprite = this.placePoint(this.nearestPoint[0], this.nearestPoint[1]);
 
                 if (this.randPoint === this.nearestPoint) {
-                    console.log("YOU FOUND IT!");
+                    //console.log("YOU FOUND IT!");
                     placedSprite.loadTexture('pointcircle_green');
                     this.pointCorrect(placedSprite);
                     this.score += 1;
@@ -129,7 +129,7 @@ FindPoint.GameState = {
 
                 }
                 this.randPoint = this.pickRandomPoint();
-                console.log("RandomPoint: " + this.randPoint);
+                //console.log("RandomPoint: " + this.randPoint);
                 this.pointText.destroy();
                 this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point to (' + this.randPoint + ")", this.textStyle);
                 //this.updateScore.destroy();
@@ -142,6 +142,21 @@ FindPoint.GameState = {
 
     //executed after everything is loaded
     create: function () {
+        
+        var style = {
+            font: '12px Arial',
+            fill: 'black'
+        };
+        //New Game - button
+        var restartButton = this.game.add.button(40, 30, 'button');
+        restartButton.anchor.setTo(0.5, 1);
+        restartButton.scale.setTo(0.4, 0.5);
+        var restartGameText =this.game.add.text(restartButton.position.x, restartButton.position.y, 'Restart', style);
+        restartGameText.anchor.setTo(0.5, 1);
+
+        restartButton.events.onInputDown.add(function(){
+            FindPoint.game.state.start('HomeState');
+        }, this);
 
 
         //generate random velocity for the end scene
@@ -295,13 +310,13 @@ FindPoint.GameState = {
     },
     //blow the sprite
     pointInCorrect: function (sprite) {
-        tween = this.game.add.tween(sprite.scale).to({x: 0.7, y: 0.7}, 500);
-        tweenNorm = this.game.add.tween(sprite.scale).to({x: 0.5, y: 0.5}, 200);
+        var tween = this.game.add.tween(sprite.scale).to({x: 0.7, y: 0.7}, 500);
+        var tweenNorm = this.game.add.tween(sprite.scale).to({x: 0.5, y: 0.5}, 200);
         tween.chain(tweenNorm);
         tween.start();
         //destroy sprite
         tweenNorm.onComplete.add(function () {
-            emitter = this.game.add.emitter(sprite.x, sprite.y, 300);
+            var emitter = this.game.add.emitter(sprite.x, sprite.y, 300);
             emitter.makeParticles('pointparticle');
             //emitter.gravity = 20;
             emitter.setXSpeed(-200, 200);
@@ -312,8 +327,8 @@ FindPoint.GameState = {
 
     },
     pointCorrect: function (sprite) {
-        tween = this.game.add.tween(sprite.scale).to({x: 0.7, y: 0.7}, 500);
-        tweenNorm = this.game.add.tween(sprite.scale).to({x: 0.5, y: 0.5}, 200);
+        var tween = this.game.add.tween(sprite.scale).to({x: 0.7, y: 0.7}, 500);
+        var tweenNorm = this.game.add.tween(sprite.scale).to({x: 0.5, y: 0.5}, 200);
         tween.chain(tweenNorm);
         tween.start();
     },
@@ -385,7 +400,6 @@ FindPoint.GameState = {
         restartGameText.anchor.setTo(0.5);
 
         restartButton.events.onInputDown.add(function(){
-            restartButton.key = "button_pressed";
             FindPoint.game.state.start('HomeState');
         }, this);
 

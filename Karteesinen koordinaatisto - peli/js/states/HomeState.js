@@ -44,27 +44,28 @@ FindPoint.HomeState = {
             fill: '#ff32c3'
         };
         var guideTextStyle = {
-            font: '20px Arial',
+            font: 'bold 24px Arial',
             fill: '#000000',
-            align: 'center'
+            align: 'center',
+            wordWrap: true,
+            wordWrapWidth: 300
         }
         var gameNameText = this.game.add.text(this.game.world.width/2, 120, 'Find The Point', gameTextStyle);
         gameNameText.anchor.setTo(0.5);
         gameNameText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 10);
 
-        var startGameButton = this.game.add.button(this.game.world.width/2, this.game.world.height/1.21, 'button');
+        var startGameButton = this.game.add.button(this.game.world.width/2, this.game.world.height/2, 'button');
         startGameButton.anchor.setTo(0.5);
         startGameButton.scale.setTo(1.5);
         var startGameText =this.game.add.text(startGameButton.position.x, startGameButton.position.y, 'Start Game', this.startGameTextstyle);
         startGameText.anchor.setTo(0.5);
 
-        //var guideTextText = 'You have 60 seconds \n\n to place as many points you can in the Cartesian coordinate grid.';
-        //var guideText = this.game.add.text(this.game.world.width/2.5, this.game.world.height/2, guideTextText, guideTextStyle);
-        //guideText.anchor.setTo(0.5);
-        //guideText.setTextBounds(100, 0, 100, 100);
+        var guideTextText = 'You have 30 seconds to place as many points you can in the Cartesian coordinate grid.';
+        var guideText = this.game.add.text(this.game.world.width/1.2, this.game.world.height/1.2, guideTextText, guideTextStyle);
+        guideText.anchor.setTo(0.5);
+        //guideText.setTextBounds(0, 0, 100, 100);
 
         startGameButton.events.onInputDown.add(function(){
-            startGameButton.key = "button_pressed";
             FindPoint.game.state.start('GameState');
         }, this);
 

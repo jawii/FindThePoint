@@ -22,8 +22,7 @@ FindPoint.PreloadState = {
 
 
     //http://www.kenney.nl/assets/ui-pack-rpg-expansion
-    this.game.load.image('button_pressed', 'assets/images/buttonLong_blue_pressed.png');
-    this.game.load.image('button', 'assets/images/buttonLong_blue.png');
+    this.game.load.image('button', 'assets/images/button_green.png');
 
     //background
     //this.game.load.image("background", 'assets/images/background.jpg');
