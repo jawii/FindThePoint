@@ -7,7 +7,7 @@ FindPoint.GameState = {
     init: function () {
 
         //Line style
-        this.coordLineWidth = 0.6;
+        this.coordLineWidth = 0.9;
         this.coordLineColor = 'gray';
         this.coordLineAlpha = 0.4;
         //Axis style
@@ -16,26 +16,45 @@ FindPoint.GameState = {
         this.axLineAlpha = 0.5;
         //Axis number style
         this.axNumStyle = {
-            font: "bold 18px Arial"
+            font: "bold 24px alegreyaregular"
         };
 
         //text-style for texts (not axis numbers)
         this.textStyle = {
-            font: "24px Arial",
+            font: "24px Bungee",
             fill: "#000000",
             align: "center"
         };
 
+        this.timeLeftTextStyle = {
+            font: "24px Bungee",
+            fill: "red",
+            align: "center"
+        };
+
+        this.pointStyle = {
+            font: "24px Bungee",
+            fill: "red",
+            align: "center"
+        };
+
+        this.styleAx = {
+            font: "24px alegreyaregular",
+            fill: "black",
+            align: "center"
+        };
+
+
         this.score = 0;
         this.highScore = localStorage.getItem("FindThePointHighScore");
         this.scoreTextStyle = {
-            font: "32px Arial",
+            font: "28px Bungee",
             fill: "#000000",
             align: 'center'
         };
 
         //Axis number offset
-        this.xaxisNumberOffsetX = -7;
+        this.xaxisNumberOffsetX = -8;
         this.xaxisNumberOffsetY = 5;
         this.yaxisNumberOffsetX = 7;
         this.yaxisNumberOffsetY = -7;
@@ -46,9 +65,9 @@ FindPoint.GameState = {
         //Points scale
         this.POINTSCALE = 0.4;
         //coordinate grid
-        this.COORD_YWIDTH = 6;
+        this.COORD_YWIDTH = 5;
         var helperValue = Math.floor(this.COORD_YWIDTH * this.game.width / this.game.height);
-        this.COORD_XWIDTH = Math.min(helperValue, 8);
+        this.COORD_XWIDTH = Math.min(helperValue, 5);
         this.origo = [this.game.world.width / 2, this.game.world.height / 2];
         //group of points
         this.pointsGroup = [];
@@ -59,13 +78,14 @@ FindPoint.GameState = {
 
         //score text
         this.placePointTextPosition = {
-            x: 30,
-            y: this.game.world.height / 11
+            x: 50,
+            y: 20
         };
+
         //counter text
         this.timerTextPosition = {
-            x: this.game.world.width / 1.5,
-            y: this.game.world.height / 11
+            x: 525,
+            y: 20
         };
 
         //score text position
@@ -80,6 +100,7 @@ FindPoint.GameState = {
         //counter text
         this.TIMER = 30;
         this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
+        this.timeLeftText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
     },
     //load the game assets before the game starts
     preload: function () {
@@ -102,7 +123,8 @@ FindPoint.GameState = {
         //first point
         this.nearestPoint = [];
         this.randPoint = this.pickRandomPoint();
-        this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point to (' + this.randPoint + ")", this.textStyle);
+        this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point', this.textStyle);
+        this.pointTextPoint = this.game.add.text(this.placePointTextPosition.x + 200, this.placePointTextPosition.y, '( ' + this.randPoint + " )", this.pointStyle);
         //this.updateScore = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, 'Score:' + this.score);
 
 
@@ -130,30 +152,30 @@ FindPoint.GameState = {
                 this.randPoint = this.pickRandomPoint();
                 //console.log("RandomPoint: " + this.randPoint);
                 this.pointText.destroy();
-                this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point to (' + this.randPoint + ")", this.textStyle);
+                this.pointTextPoint.destroy();
+                this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point', this.textStyle);
+                this.pointTextPoint = this.game.add.text(this.placePointTextPosition.x + 200, this.placePointTextPosition.y, '(' + this.randPoint + ")", this.pointStyle);
                 //this.updateScore.destroy();
                 //this.updateScore = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, 'Score:' + this.score);
             }
         }, this);
-
-
     },
-
     //executed after everything is loaded
     create: function () {
         
         var style = {
-            font: '12px Arial',
+            font: '10px Bungee',
             fill: 'black'
         };
         //New Game - button
-        var restartButton = this.game.add.button(40, 30, 'button');
-        restartButton.anchor.setTo(0.5, 1);
-        restartButton.scale.setTo(0.4, 0.5);
-        var restartGameText =this.game.add.text(restartButton.position.x, restartButton.position.y, 'Restart', style);
-        restartGameText.anchor.setTo(0.5, 1);
+        this.restartButton = this.game.add.button(60, 590, 'button');
+        this.restartButton.anchor.setTo(0.5, 1);
+        this.restartButton.scale.setTo(0.4, 0.5);
+        this.restartGameText =this.game.add.text(this.restartButton.position.x, this.restartButton.position.y, 'Restart', style);
+        this.restartGameText.anchor.setTo(0.5, 1);
+        this.restartButton.alpha = 0.5;
 
-        restartButton.events.onInputDown.add(function(){
+        this.restartButton.events.onInputDown.add(function(){
             FindPoint.game.state.start('HomeState');
         }, this);
 
@@ -173,12 +195,14 @@ FindPoint.GameState = {
         this.timerEvent = this.timer.add(Phaser.Timer.SECOND * this.TIMER, this.endTimer, this);
         this.timer.start();
     },
-
     update: function () {
         //check if time left
         if (this.timer.running) {
             this.timerText.destroy();
-            this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Time left: " + Math.ceil((this.TIMER * 1000 - (this.timer.ms)) / 1000), this.textStyle);
+            this.timeLeftText.destroy();
+            this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Time left", this.textStyle);
+            this.timeLeftText = this.game.add.text(this.timerTextPosition.x + 150, this.timerTextPosition.y, Math.ceil((this.TIMER * 1000 - (this.timer.ms)) / 1000), this.timeLeftTextStyle)
+            //this.timerText.addColor('#ff00ff', 10);
         }
         else {
 
@@ -315,7 +339,7 @@ FindPoint.GameState = {
         tween.start();
         //destroy sprite
         tweenNorm.onComplete.add(function () {
-            var emitter = this.game.add.emitter(sprite.x, sprite.y, 300);
+            var emitter = this.game.add.emitter(sprite.x, sprite.y, 200);
             emitter.makeParticles('pointparticle');
             //emitter.gravity = 20;
             emitter.setXSpeed(-200, 200);
@@ -342,7 +366,9 @@ FindPoint.GameState = {
     gameOver: function () {
         //removeTexts
         this.pointText.destroy();
+        this.pointTextPoint.destroy();
         this.timerText.destroy();
+        this.timeLeftText.destroy();
         //remove coordinate grid
         this.graphics.clear();
         this.axisNumberGroup.destroy();
@@ -376,9 +402,14 @@ FindPoint.GameState = {
     //add score and play again button
     scoreText: function () {
 
+        this.restartButton.destroy();
+        this.restartGameText.destroy();
+
         this.game.stage.backgroundColor =  FindPoint.HomeState.backgroundColor;
         var scoreText = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, "Score: " + this.score, this.scoreTextStyle);
         scoreText.anchor.setTo(0.5);
+        
+        console.log(this.highScore);
 
         if(this.highScore !== null){
             if (this.score > this.highScore){
@@ -389,7 +420,8 @@ FindPoint.GameState = {
             localStorage.setItem("FindThePointHighScore", this.score);
         }
         this.highScore = localStorage.getItem("FindThePointHighScore");
-        var highScoreText = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y + 50, "Your Highscore: " + this.score, this.scoreTextStyle);
+        
+        var highScoreText = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y + 50, "Your Highscore: " + this.highScore, this.scoreTextStyle);
         highScoreText.anchor.setTo(0.5);
 
         var restartButton = this.game.add.button(this.scoreTextPosition.x, this.scoreTextPosition.y + 200, 'button');

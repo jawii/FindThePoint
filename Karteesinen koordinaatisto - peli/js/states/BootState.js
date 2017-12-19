@@ -8,7 +8,7 @@ FindPoint.BootState = {
     },
     preload: function(){
         //console.log("BootState");
-        //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.load.image('preloadBar', 'assets/images/bar.png');
 
 
