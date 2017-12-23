@@ -8,7 +8,12 @@ FindPoint.BootState = {
     },
     preload: function(){
         //console.log("BootState");
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        //scaling options
+        this.mobile = !this.game.device.desktop ? true : false;
+
+        if(this.mobile){
+          this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        }
         this.load.image('preloadBar', 'assets/images/bar.png');
 
 
