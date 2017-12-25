@@ -16,6 +16,9 @@ FindPoint.BootState = {
         }
         this.load.image('preloadBar', 'assets/images/bar.png');
 
+        //keep running on background
+        this.game.stage.disableVisibilityChange = true;
+
 
         FindPoint.game.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         //FindPoint.game.scale.minWidth = 480;

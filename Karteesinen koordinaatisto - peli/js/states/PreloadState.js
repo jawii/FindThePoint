@@ -23,8 +23,10 @@ FindPoint.PreloadState = {
     //http://www.kenney.nl/assets/ui-pack-rpg-expansion
     this.game.load.image('button', 'assets/images/button_green.png');
 
-    //background
-    //this.game.load.image("background", 'assets/images/background.jpg');
+    //audio
+    this.load.audio('music', ['assets/audio/music.mp3', 'assets/audio/music.ogg']);
+    this.load.audio('correct', ['assets/audio/correct.mp3', 'assets/audio/correct.ogg']);
+    this.load.audio('wrong', ['assets/audio/wrong.mp3', 'assets/audio/wrong.ogg']);
 
     },
 

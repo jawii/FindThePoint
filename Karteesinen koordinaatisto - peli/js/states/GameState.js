@@ -194,6 +194,11 @@ FindPoint.GameState = {
         this.timer = this.game.time.create();
         this.timerEvent = this.timer.add(Phaser.Timer.SECOND * this.TIMER, this.endTimer, this);
         this.timer.start();
+
+        //play background music
+        this.gameMusic = new Phaser.Sound(this.game,'music',0.5,true);
+        this.gameMusic.play();
+
     },
     update: function () {
         //check if time left
@@ -341,6 +346,7 @@ FindPoint.GameState = {
         tweenNorm.onComplete.add(function () {
             var emitter = this.game.add.emitter(sprite.x, sprite.y, 200);
             emitter.makeParticles('pointparticle');
+            this.game.sound.play('wrong');
             //emitter.gravity = 20;
             emitter.setXSpeed(-200, 200);
             emitter.setYSpeed(-200, 200);
@@ -354,6 +360,10 @@ FindPoint.GameState = {
         var tweenNorm = this.game.add.tween(sprite.scale).to({x: 0.5, y: 0.5}, 200);
         tween.chain(tweenNorm);
         tween.start();
+        tweenNorm.onComplete.add(function (){
+            this.game.sound.play('correct');
+        }, this);
+
     },
 
     render: function () {
