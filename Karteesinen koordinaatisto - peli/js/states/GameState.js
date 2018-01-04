@@ -98,7 +98,7 @@ FindPoint.GameState = {
         this.blowSlowSprites = false;
 
         //counter text
-        this.TIMER = 30;
+        this.TIMER = 45;
         this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
         this.timeLeftText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Hello", this.textStyle);
     },
@@ -177,6 +177,7 @@ FindPoint.GameState = {
 
         this.restartButton.events.onInputDown.add(function(){
             FindPoint.game.state.start('HomeState');
+            this.gameMusic.destroy();
         }, this);
 
 
@@ -379,6 +380,8 @@ FindPoint.GameState = {
         this.pointTextPoint.destroy();
         this.timerText.destroy();
         this.timeLeftText.destroy();
+
+        this.gameMusic.destroy();
         //remove coordinate grid
         this.graphics.clear();
         this.axisNumberGroup.destroy();
@@ -419,7 +422,7 @@ FindPoint.GameState = {
         var scoreText = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, "Score: " + this.score, this.scoreTextStyle);
         scoreText.anchor.setTo(0.5);
         
-        console.log(this.highScore);
+        //console.log(this.highScore);
 
         if(this.highScore !== null){
             if (this.score > this.highScore){
