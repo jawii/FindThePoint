@@ -48,7 +48,8 @@ FindPoint.HomeState = {
         var startGameText =this.game.add.text(startGameButton.position.x, startGameButton.position.y, 'Start Game', this.startGameTextstyle);
         startGameText.anchor.setTo(0.5);
 
-        var guideTextText = 'You have 45 seconds to place as many points you can in the Cartesian coordinate grid.';
+        // var guideTextText = 'You have 45 seconds to place as many points you can in the Cartesian coordinate grid.';
+        var guideTextText = 'Laita 45 sekunnin aikana niin monta pistettä paikalleen kun ehdit.';
         var guideText = this.game.add.text(400, 300, guideTextText, guideTextStyle);
         guideText.anchor.setTo(0.5);
         guideText.font = 'Bungee'

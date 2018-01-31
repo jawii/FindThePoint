@@ -78,7 +78,7 @@ FindPoint.GameState = {
 
         //score text
         this.placePointTextPosition = {
-            x: 50,
+            x: 100,
             y: 20
         };
 
@@ -123,8 +123,8 @@ FindPoint.GameState = {
         //first point
         this.nearestPoint = [];
         this.randPoint = this.pickRandomPoint();
-        this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point', this.textStyle);
-        this.pointTextPoint = this.game.add.text(this.placePointTextPosition.x + 200, this.placePointTextPosition.y, '( ' + this.randPoint + " )", this.pointStyle);
+        this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Piste', this.textStyle);
+        this.pointTextPoint = this.game.add.text(this.placePointTextPosition.x + 120, this.placePointTextPosition.y, '( ' + this.randPoint + " )", this.pointStyle);
         //this.updateScore = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, 'Score:' + this.score);
 
 
@@ -153,8 +153,8 @@ FindPoint.GameState = {
                 //console.log("RandomPoint: " + this.randPoint);
                 this.pointText.destroy();
                 this.pointTextPoint.destroy();
-                this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Place point', this.textStyle);
-                this.pointTextPoint = this.game.add.text(this.placePointTextPosition.x + 200, this.placePointTextPosition.y, '(' + this.randPoint + ")", this.pointStyle);
+                this.pointText = this.game.add.text(this.placePointTextPosition.x, this.placePointTextPosition.y, 'Piste', this.textStyle);
+                this.pointTextPoint = this.game.add.text(this.placePointTextPosition.x + 120, this.placePointTextPosition.y, '(' + this.randPoint + ")", this.pointStyle);
                 //this.updateScore.destroy();
                 //this.updateScore = this.game.add.text(this.scoreTextPosition.x, this.scoreTextPosition.y, 'Score:' + this.score);
             }
@@ -206,7 +206,7 @@ FindPoint.GameState = {
         if (this.timer.running) {
             this.timerText.destroy();
             this.timeLeftText.destroy();
-            this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "Time left", this.textStyle);
+            this.timerText = this.game.add.text(this.timerTextPosition.x, this.timerTextPosition.y, "AIKA", this.textStyle);
             this.timeLeftText = this.game.add.text(this.timerTextPosition.x + 150, this.timerTextPosition.y, Math.ceil((this.TIMER * 1000 - (this.timer.ms)) / 1000), this.timeLeftTextStyle)
             //this.timerText.addColor('#ff00ff', 10);
         }
