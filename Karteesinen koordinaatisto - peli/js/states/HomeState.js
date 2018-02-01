@@ -11,7 +11,7 @@ FindPoint.HomeState = {
         // background.inputEnabled = true;
 
         //Background for this screen and game over screen
-        this.backgroundColor = "#f9f6ff"
+        this.backgroundColor = "#fff";
         this.game.stage.backgroundColor =  this.backgroundColor;
 
 
